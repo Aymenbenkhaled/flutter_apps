@@ -1,65 +1,62 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_1/modules/counter/cubit/cubit.dart';
+import 'package:flutter_app_1/modules/counter/cubit/states.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CounterScreen extends StatefulWidget {
-
-  @override
-  State<CounterScreen> createState() => _CounterScreenState();
-}
-
-class _CounterScreenState extends State<CounterScreen> {
-  int counter=1;
-
-  @override
-  void initState() {
-    super.initState();
-  }
+class CounterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Counter',
-        ),
-      ),
-      body: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextButton(
-                onPressed: () {
-                  setState(() {
-                  });
-                  counter--;
-                  print(counter);
-                },
-                child: Text(
-                  'Mins'
-                ),
-            ),
-            Text(
-              '$counter',
-              style: TextStyle(
-                fontSize: 50
-                  ,
-                fontWeight: FontWeight.w600
+    return BlocProvider(
+      create: (BuildContext context) => CounterCubit(),
+
+      child: BlocConsumer< CounterCubit, CounterStates>(
+        listener: (context, state) {
+          if(state is CounterMinusState) print('minus state ${state.counter}');
+          if(state is CounterPlusState) print('plus state ${state.counter}');
+        },
+        builder: (context, state) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(
+                'Counter',
               ),
             ),
-            TextButton(
-                onPressed:() {
-                  setState(() {
-
-                  });
-                  counter++;
-                  print(counter);
-                },
-                child: Text(
-                  'plus'
-                ),
+            body: Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      CounterCubit.get(context).minus();
+                    },
+                    child: Text(
+                        'Mins'
+                    ),
+                  ),
+                  Text(
+                    '${CounterCubit.get(context).counter}',
+                    style: TextStyle(
+                        fontSize: 50
+                        ,
+                        fontWeight: FontWeight.w600
+                    ),
+                  ),
+                  TextButton(
+                    onPressed:() {
+                      CounterCubit.get(context).plus();
+                    },
+                    child: Text(
+                        'plus'
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
 }
+
