@@ -9,14 +9,19 @@ import 'package:sqflite/sqflite.dart';
 import '../../modules/new_tasks/new_tasks_screen.dart';
 import '../components/constants.dart';
 
-class AppCubit extends Cubit<AppStates>{
-
-  AppCubit() : super (AppInitialState());
+class AppCubit extends Cubit<AppStates> {
+  AppCubit() : super(AppInitialState());
 
   static AppCubit get(context) => BlocProvider.of(context);
   late Database db;
+  IconData fabIcon = Icons.edit;
+  bool bol = false;
 
   int index = 0;
+  List<Map> newTasks = [];
+  List<Map> doneTasks = [];
+  List<Map> archivedTasks = [];
+
   List<Widget> Screens = [
     NewTasksScreen(),
     DoneTasksScreen(),
@@ -28,12 +33,12 @@ class AppCubit extends Cubit<AppStates>{
     'Archived Tasks',
   ];
 
-  void ChangeIndex(value){
+  void ChangeIndex(value) {
     index = value;
     emit(AppChangeIndexState());
   }
 
-  void createDb()  {
+  void createDb() {
     openDatabase(
       'Todo.db',
       version: 1,
@@ -41,7 +46,7 @@ class AppCubit extends Cubit<AppStates>{
         print('db created');
         db
             .execute(
-            'CREATE TABLE tasks (id INTEGER PRIMARY KEY,title TEXT,date TEXT,time TEXT,status TEXT)')
+                'CREATE TABLE tasks (id INTEGER PRIMARY KEY,title TEXT,date TEXT,time TEXT,status TEXT)')
             .then((value) {
           print('table created');
         }).catchError((error) {
@@ -49,40 +54,81 @@ class AppCubit extends Cubit<AppStates>{
         });
       },
       onOpen: (db) {
-        getDataFromDb(db).then((value) {
-          // setState(() {
-          //   tasks = value;
-          // });
-          print(tasks[0]);
-        });
+        getDataFromDb(db);
         print('db Opened');
       },
-    ).then((value) => emit(AppCreateDbState()));
-
+    ).then((value) {
+      db = value;
+      emit(AppCreateDbState());
+    });
   }
 
   Future insertToDb({
     required String title,
     required String date,
     required String time,
-  }) {
-    return db.transaction((txn) {
+  }) async {
+    return await db.transaction((txn) {
       txn
           .rawInsert(
-          'INSERT INTO tasks(title,date,time,status) VALUES ("$title","$date","$time","new")')
+              'INSERT INTO tasks(title,date,time,status) VALUES ("$title","$date","$time","new")')
           .then((value) {
         print('$value inserted successfully');
+        emit(AppInsertToDbState());
+        getDataFromDb(db);
       }).catchError((error) {
         print('the error of insertion is ${error.toString()}');
       });
       return Future(() => null);
-    }).then((value) => emit(AppInsertToDbState()));
-
+    });
   }
 
-  Future<List<Map>> getDataFromDb(db)  {
-    return db.rawQuery('SELECT * FROM tasks').then((value) => emit(AppGetFromDbState()));
+  void getDataFromDb(db) {
+    newTasks = [];
+    doneTasks = [];
+    archivedTasks = [];
+    emit(AppLoadingState());
+    db.rawQuery('SELECT * FROM tasks').then((value) {
+      value.forEach((element) {
+        if (element['status'] == 'new')
+          newTasks.add(element);
+        else if (element['status'] == 'done')
+          doneTasks.add(element);
+        else
+          archivedTasks.add(element);
+      });
+      emit(AppGetFromDbState());
+    });
   }
 
+  void updateDataFromDb({
+    required String status,
+    required int id,
+  }) async {
+    db.rawUpdate('UPDATE tasks SET status = ? WHERE id = ?',
+        ['$status', id]).then((value) {
+      getDataFromDb(db);
+      emit(AppUpdateDataFromDbState());
+    });
+  }
+  
+  void deleteDataFromDb({
+    required int id
+}){
+    db.rawDelete(
+        'DELETE FROM tasks WHERE id = ?', [id]
+    ).then((value) {
+      getDataFromDb(db);
+      emit(AppDeleteDataFromDbState());
+    });
+  }
 
+  void ChangeBottomSheetState({
+    required IconData icon,
+    required bool boll,
+  }) {
+    bol = boll;
+    fabIcon = icon;
+    emit(AppChageBottomSheetState());
+  }
 }

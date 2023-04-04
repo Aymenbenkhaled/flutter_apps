@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_1/shared/cubit/cubit.dart';
+import 'package:flutter_app_1/shared/cubit/states.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 Widget defaultBotton({
   double width = 200,
@@ -70,40 +73,77 @@ Widget defaultFormField({
       ),
     );
 
-
-Widget buildTaskItem(Map modal){
-  return Padding(
-    padding: const EdgeInsets.all(20.0),
-    child: Row(
-      children: [
-        CircleAvatar(
-          radius: 30,
-          child: Text(
-            '${modal['time']}',
+Widget buildTaskItem(Map modal) {
+  return BlocConsumer<AppCubit,AppStates>(
+    listener: (BuildContext context, state) {  },
+    builder: (BuildContext context, state) {
+      AppCubit cubit = AppCubit.get(context);
+      return Dismissible(
+        key: Key(modal['id'].toString()),
+        onDismissed: (direction) {
+          cubit.deleteDataFromDb(id: modal['id']);
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 30,
+                child: Text(
+                  '${modal['time']}',
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      '${modal['title']}',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                    Text(
+                      '${modal['date']}',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          color: Colors.grey),
+                    ),
+                  ],
+                ),
+              ),
+              IconButton(
+                  onPressed: () {
+                    cubit.updateDataFromDb(status: 'done',id: modal['id']);
+                  } ,
+                  icon: Icon(
+                    Icons.check_box,
+                    color: Colors.green,
+                    size: 35,
+                  )
+              ),
+              SizedBox(width: 20,),
+              IconButton(
+                  onPressed: () {
+                    cubit.updateDataFromDb(status: 'archived',id: modal['id']);
+                  } ,
+                  icon: Icon(
+                    Icons.archive,
+                    size: 35,
+                  )
+              ),
+            ],
           ),
         ),
-        SizedBox(width: 10,),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              '${modal['title']}',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
-            ),Text(
-              '${modal['date']}',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15,
-                  color: Colors.grey
-              ),
-            ),
-          ],
-        ),
-      ],
-    ),
+
+      );
+    },
+
   );
 }

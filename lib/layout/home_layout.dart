@@ -18,11 +18,11 @@ class HomeLayout extends StatelessWidget {
 
   var scaffoldKea = GlobalKey<ScaffoldState>();
   var formKea = GlobalKey<FormState>();
-  bool bol = false;
+
   var titleControler = TextEditingController();
   var timeControler = TextEditingController();
   var dateControler = TextEditingController();
-  IconData fabIcon = Icons.edit;
+
 
   // @override
   // void initState() {
@@ -33,37 +33,30 @@ class HomeLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => AppCubit() ,
+      create: (BuildContext context) => AppCubit()..createDb() ,
       child: BlocConsumer<AppCubit,AppStates>(
-        listener: (context, state) {  },
-        builder: (context, states) {
+        listener: (context, state) {
+          if (state is AppInsertToDbState) Navigator.pop(context);
+        },
+        builder: (context, state) {
           AppCubit cubit = AppCubit.get(context);
           return Scaffold(
                   key: scaffoldKea,
                   appBar: AppBar(
                     title: Text(cubit.Titles[cubit.index]),
                   ),
-                  body: tasks.length < 0
+                  body: state is AppLoadingState
                       ? Center(child: CircularProgressIndicator())
                       : cubit.Screens[cubit.index],
                   floatingActionButton: FloatingActionButton(
                     onPressed: () {
-                      if (bol) {
+                      if (cubit.bol) {
                         if (formKea.currentState!.validate()) {
                           cubit.insertToDb(
                             title: titleControler.text,
                             date: dateControler.text,
                             time: timeControler.text,
-                          ).then((value) {
-                            cubit.getDataFromDb(cubit.db).then((value) {
-                              Navigator.pop(context);
-                              // setState(() {
-                              //   bol = false;
-                              //   fabIcon = Icons.edit;
-                              //   tasks = value;
-                              // });
-                            });
-                          });
+                          );
                         }
                       } else {
                         scaffoldKea.currentState!
@@ -142,18 +135,13 @@ class HomeLayout extends StatelessWidget {
                             )
                             .closed
                             .then((value) {
-                          bol = false;
-                          // setState(() {
-                          //   fabIcon = Icons.edit;
-                          // });
+                              cubit.ChangeBottomSheetState(icon: Icons.edit, boll: false);
                         });
-                        bol = true;
-                        // setState(() {
-                        //   fabIcon = Icons.add;
-                        // });
+                        cubit.ChangeBottomSheetState(icon: Icons.add, boll: true);
+
                       }
                     },
-                    child: Icon(fabIcon),
+                    child: Icon(cubit.fabIcon),
                   ),
                   bottomNavigationBar: BottomNavigationBar(
                       type: BottomNavigationBarType.fixed,
