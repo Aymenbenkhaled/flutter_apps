@@ -10,8 +10,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../modules/done_tasks/done_tasks_screen.dart';
-import '../shared/components/constants.dart';
+import '../../modules/done_tasks/done_tasks_screen.dart';
+import '../../shared/components/constants.dart';
 
 class HomeLayout extends StatelessWidget {
 
