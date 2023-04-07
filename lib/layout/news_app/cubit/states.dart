@@ -31,3 +31,6 @@ class NewsGetScienceErrorState extends NewsStates{
   NewsGetScienceErrorState(this.error);
 }
 
+class NewsChangeDarkLightState extends NewsStates{}
+
+

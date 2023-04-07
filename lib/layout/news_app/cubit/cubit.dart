@@ -1,3 +1,4 @@
+
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_app_1/modules/business/business_screen.dart';
 import 'package:flutter_app_1/modules/science/sience_screen.dart';
 import 'package:flutter_app_1/modules/settings/settings_screen.dart';
 import 'package:flutter_app_1/modules/sports/sports_screen.dart';
+import 'package:flutter_app_1/shared/network/local/cache_helper.dart';
 import 'package:flutter_app_1/shared/network/remote/dio_helper.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -27,18 +29,12 @@ class NewsCubit extends Cubit<NewsStates>{
       icon: Icon(Icons.science),
       label: 'Science',
     ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.settings),
-      label: 'Settings',
-    ),
-
   ];
 
   List<Widget> screens = [
     BusinessScreen(),
     SportsScreen(),
     ScienceScreen(),
-    SettingsScreen(),
   ];
 
   void changeBottomIndex(value){
@@ -104,6 +100,14 @@ class NewsCubit extends Cubit<NewsStates>{
             (error){
               emit(NewsGetScienceErrorState(error));
             });
+  }
+
+  bool darkLight = true;
+
+  void changeDarkLight(){
+    darkLight = !darkLight;
+    CacheHelper.putData(key: 'DarkLight', value: darkLight);
+    emit(NewsChangeDarkLightState());
   }
 
 }

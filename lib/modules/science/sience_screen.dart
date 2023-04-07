@@ -13,7 +13,7 @@ class ScienceScreen extends StatelessWidget {
       builder: (context, state) {
         var cubit = NewsCubit.get(context);
         return ConditionalBuilder(
-          condition: state is! NewsGetScienceLoadingState,
+          condition: cubit.science.length>0,
           builder:(context) => ListView.separated(
             physics: BouncingScrollPhysics(),
             itemBuilder: (BuildContext context, int index) =>

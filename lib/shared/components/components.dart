@@ -154,7 +154,7 @@ Widget buildSeparator() {
     child: Container(
       width: double.infinity,
       height: 1,
-      color: Colors.black12,
+      color: Colors.grey[500],
     ),
   );
 }
@@ -195,11 +195,7 @@ Widget buildArticleItem(article) {
                       Expanded(
                         child: Text(
                           '${article['title']}',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium,
                           maxLines: 3,
                         ),
                       ),
@@ -207,7 +203,7 @@ Widget buildArticleItem(article) {
                       Text(
                         '${article['publishedAt'].toString()}',
                         style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 15,
                             fontWeight: FontWeight.w600,
                             color: Colors.grey[500]),
                       ),

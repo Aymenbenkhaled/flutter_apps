@@ -16,7 +16,7 @@ class BusinessScreen extends StatelessWidget {
       builder: (context, state) {
         var cubit = NewsCubit.get(context);
         return ConditionalBuilder(
-          condition: state is! NewsGetBusinessLoadingState,
+          condition: cubit.business.length>0,
           builder:(context) => ListView.separated(
             physics: BouncingScrollPhysics(),
             itemBuilder: (BuildContext context, int index) => buildArticleItem(cubit.business[index]),
