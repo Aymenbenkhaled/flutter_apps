@@ -1,5 +1,7 @@
 import 'package:conditional_builder/conditional_builder.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_1/modules/news_app/search/search_screen.dart';
+import 'package:flutter_app_1/shared/components/components.dart';
 import 'package:flutter_app_1/shared/network/local/cache_helper.dart';
 import 'package:flutter_app_1/shared/network/remote/dio_helper.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,6 +25,7 @@ class NewsLayout extends StatelessWidget {
             actions: [
               IconButton(
                 onPressed: () {
+                  navPush(context, SearchScreen());
                 },
                 icon: Icon(
                   Icons.search,

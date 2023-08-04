@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app_1/modules/archived_tasks/archived_tasks_screen.dart';
-import 'package:flutter_app_1/modules/new_tasks/new_tasks_screen.dart';
+import 'package:flutter_app_1/modules/todo_app/archived_tasks/archived_tasks_screen.dart';
+import 'package:flutter_app_1/modules/todo_app/new_tasks/new_tasks_screen.dart';
 import 'package:flutter_app_1/shared/components/components.dart';
 import 'package:flutter_app_1/shared/cubit/cubit.dart';
 import 'package:flutter_app_1/shared/cubit/states.dart';
@@ -10,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../../modules/done_tasks/done_tasks_screen.dart';
+import '../../modules/todo_app/done_tasks/done_tasks_screen.dart';
 import '../../shared/components/constants.dart';
 
 class HomeLayout extends StatelessWidget {

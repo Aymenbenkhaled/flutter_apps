@@ -5,7 +5,7 @@ import 'package:flutter_app_1/shared/cubit/cubit.dart';
 import 'package:flutter_app_1/shared/cubit/states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../shared/components/constants.dart';
+import '../../../shared/components/constants.dart';
 
 class NewTasksScreen extends StatelessWidget {
 

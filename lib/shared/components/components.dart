@@ -216,3 +216,12 @@ Widget buildArticleItem(article) {
         );
       });
 }
+
+void navPush(context, widget){
+  Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => widget,
+      )
+  );
+}

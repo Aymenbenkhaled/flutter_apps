@@ -5,12 +5,7 @@ import 'package:flutter_app_1/layout/news_app/cubit/cubit.dart';
 import 'package:flutter_app_1/layout/news_app/cubit/states.dart';
 import 'package:flutter_app_1/layout/news_app/news_layout.dart';
 import 'package:flutter_app_1/layout/todo_app/home_layout.dart';
-import 'package:flutter_app_1/modules/bmi/bmi_screen.dart';
-import 'package:flutter_app_1/modules/counter/counter_screen.dart';
-import 'package:flutter_app_1/modules/home/home_screen.dart';
-import 'package:flutter_app_1/modules/login/login_screen.dart';
-import 'package:flutter_app_1/modules/messenger/messenger_screen.dart';
-import 'package:flutter_app_1/modules/users/users_screen.dart';
+import 'package:flutter_app_1/modules/bmi_app/bmi/bmi_screen.dart';
 import 'package:flutter_app_1/shared/bloc_observer.dart';
 import 'package:flutter_app_1/shared/network/local/cache_helper.dart';
 import 'package:flutter_app_1/shared/network/remote/dio_helper.dart';
@@ -32,7 +27,8 @@ class MyApp extends StatelessWidget {
       create: (BuildContext context) => NewsCubit()
         ..getBuseniss()
         ..getSports()
-        ..getScience(),
+        ..getScience()
+        ..changeDarkLight(),
       child: BlocConsumer<NewsCubit, NewsStates>(
         listener: (context, state) {},
         builder: (context, state) {
@@ -109,7 +105,7 @@ class MyApp extends StatelessWidget {
             ),
             themeMode: darkLight==true ? ThemeMode.light : ThemeMode.dark,
             debugShowCheckedModeBanner: false,
-            home: NewsLayout(),
+            home: HomeLayout(),
           );
         },
       ),

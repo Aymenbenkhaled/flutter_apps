@@ -3,10 +3,10 @@ import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_1/layout/news_app/cubit/states.dart';
-import 'package:flutter_app_1/modules/business/business_screen.dart';
-import 'package:flutter_app_1/modules/science/sience_screen.dart';
-import 'package:flutter_app_1/modules/settings/settings_screen.dart';
-import 'package:flutter_app_1/modules/sports/sports_screen.dart';
+import 'package:flutter_app_1/modules/news_app/business/business_screen.dart';
+import 'package:flutter_app_1/modules/news_app/science/sience_screen.dart';
+import 'package:flutter_app_1/modules/news_app/settings/settings_screen.dart';
+import 'package:flutter_app_1/modules/news_app/sports/sports_screen.dart';
 import 'package:flutter_app_1/shared/network/local/cache_helper.dart';
 import 'package:flutter_app_1/shared/network/remote/dio_helper.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -45,6 +45,8 @@ class NewsCubit extends Cubit<NewsStates>{
   List<dynamic> business=[];
   List<dynamic> sports=[];
   List<dynamic> science=[];
+
+  List<dynamic> list = [];
 
   void getBuseniss(){
     emit(NewsGetBusinessLoadingState());
@@ -98,7 +100,26 @@ class NewsCubit extends Cubit<NewsStates>{
       emit(NewsGetScienceSuccessState());
     }).catchError(
             (error){
-              emit(NewsGetScienceErrorState(error));
+              emit(NewsGetScienceErrorState(error.toString()));
+            });
+  }
+
+  void getSearch(searchValue){
+    emit(NewsGetSearchLoadingState());
+    list = [];
+    DioHelper.getData(
+        url: 'v2/everything',
+        query: {
+          'q': '$searchValue',
+          'apiKey': 'cb55b2e91ef54db7845e76de69ab10fd'
+        }
+    ).then((value) {
+      list = value.data['articles'];
+      print(list);
+      emit(NewsGetSearchSuccessState());
+    }).catchError(
+            (error){
+              emit(NewsGetSearchErrorState());
             });
   }
 

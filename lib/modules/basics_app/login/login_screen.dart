@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_1/modules/login_result/login_result_screen.dart';
 import 'package:flutter_app_1/shared/components/components.dart';
+
+import '../login_result/login_result_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
