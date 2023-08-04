@@ -1,4 +1,4 @@
-This Projects contains many Simple screens and apps.
+This Project contains many Simple screens and apps.
 Using Bloc (cubit) for the state management/Shared Preferences(Saving data like dark and light mode data / ...).....
 
 * Basics Apps and screens: 
